@@ -1,33 +1,25 @@
-import React, { component } from 'react'
-import { Link,Route, Router, Switch, useRouteMatch,BrowserRouter } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
+import axios from "axios"
 
-class ClassWelcome extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-          email: "",
-          password: ""
-        };
-      }
-    changeInputValue(e) {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
-    }
-    validationForm() {
+export default function ClassWelcome(props) {
+
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+    function validationForm() {
         let returnData = {
           error : false,
           msg: ''
         }
-        const {email, password} = this.state
-        //Kiểm tra email
-        const re = /\S+@\S+\.\S+/;
-        if (!re.test(email)) {
-          returnData = {
-            error: true,
-            msg: 'Không đúng định dạng email'
-          }
-        }
+        //Kiểm tra username
+        // const re = /\S+@\S+\.\S+/;
+        // if (!re.test(username)) {
+        //   returnData = {
+        //     error: true,
+        //     msg: 'Không đúng định dạng email'
+        //   }
+        // }
         //Kiểm tra password
         if(password.length < 8) {
           returnData = {
@@ -37,7 +29,14 @@ class ClassWelcome extends React.Component {
         }
         return returnData;
       }
-      submitForm(e) {
+
+      const handleChange = e =>
+    e.target.name === "username"
+        ? setUsername(e.target.value)
+        : e.target.name === "password"
+        ? setPassword(e.target.value)
+        : "";
+      function submitForm(e) {
         //Chặn các event mặc định của form
         // e.preventDefault();
        //Gọi hàm validationForm() dùng để kiểm tra form
@@ -48,9 +47,22 @@ class ClassWelcome extends React.Component {
         // }else{
         //   alert('Submit form success')
         // }
-       window.history.pushState({user: "", password: ""}, "users", "users")
+        axios
+      .post("http://localhost:8080/login", {
+        username: username,
+        password: password
+      })
+      .then((res) => {
+
+        // setListUser(res.data.data.content);
+        console.log("hieujwt", res)
+      })
+      .catch((err) => {
+        //Trường hợp xảy ra lỗi
+        console.log(err)
+      })
+      //  window.history.pushState(null, "users", "users")
       }
-    render() {
         return (
             <div className="container" style={{ paddingTop: "5%", display: "flex", justifyContent: "center" }}>
         <form
@@ -66,27 +78,29 @@ class ClassWelcome extends React.Component {
             padding: "10px",}}
         >
           <div className="form-group">
-            <label htmlFor="text" style={{display: "block"}}>Email:</label>
+            <label htmlFor="text" style={{display: "block"}}>Username</label>
             <input
               type="text"
               className="form-control"
-              name="email"
-              placeholder="Enter email"
-              onChange={e => this.changeInputValue(e)}
+              name="username"
+              placeholder="Enter User Name"
+              onChange={handleChange}
+              value={username}
             />
           </div>
           <div className="form-group">
-            <label htmlFor="pwd" style={{display: "block"}}>Password:</label>
+            <label htmlFor="pwd" style={{display: "block"}}>Password</label>
             <input
               type="password"
               className="form-control"
               name="password"
               placeholder="Enter password"
-              onChange={e => this.changeInputValue(e)}
+              onChange={handleChange}
+              value={password}
             />
           </div>
           <div style= {{display: "grid"}}>
-          <button type="submit" style={{cursor: "pointer", background: "blue"}} className="btn btn-primary">
+          <button type="submit" style={{cursor: "pointer", background: "blue"}} className="btn btn-primary" onClick={submitForm}>
             <div style={{color: "white"}}>Login</div>
           </button>
           <Link style={{cursor: "pointer", color: "blue"}} to="/register">Click here for new user registration</Link>
@@ -95,7 +109,4 @@ class ClassWelcome extends React.Component {
         
       </div>
         )
-    }
 }
-
-export default ClassWelcome

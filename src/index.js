@@ -5,23 +5,36 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { BrowserRouter} from 'react-router-dom';
 import TopBar from './Components/TopBar'
-import "bootstrap/dist/css/bootstrap.css"
+import { makeStyles } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import Grid from '@material-ui/core/Grid';
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+  paper: {
+    padding: theme.spacing(2),
+    textAlign: 'center',
+    color: theme.palette.text.secondary,
+  },
+}));
 ReactDOM.render(
   <React.StrictMode>
      <BrowserRouter>
-     <header>
-        <TopBar />
-     </header>
-     <section>
-       <ul>
-         <li><a href="#">London</a></li>
-         <li><a href="#">Paris</a></li>
-         <li><a href="#">Tokyo</a></li>
-       </ul>
-      </section>
-    <App />
+<div className={useStyles.root}>
+    <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Paper className={useStyles.paper}><TopBar /></Paper>
+        </Grid>
+        <Grid item xs={3}>
+          <Paper style={{height: "calc(100vh - 200px)", marginTop: "20px"}} className={useStyles.paper}>SideBar</Paper>
+        </Grid>
+        <Grid item xs={9} >
+          <Paper style={{height: "calc(100vh - 200px)"}} className={useStyles.paper}><App /></Paper>
+        </Grid>
+    </Grid>
+  </div>
     </BrowserRouter>
   </React.StrictMode>,
   document.getElementById('root')

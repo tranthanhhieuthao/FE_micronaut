@@ -1,9 +1,32 @@
-import React, { useState } from 'react'
-import { Link,Route, Switch } from 'react-router-dom';
+import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom';
 import '../CssStyle/ListUser.css'
 import axios from "axios"
+import { DataGrid } from '@material-ui/data-grid';
 
 
+const columns = [
+  { field: 'id', headerName: 'User ID', width: 90 },
+  { field: 'firstName', headerName: 'User Name', width: 150 },
+  { field: 'lastName', headerName: 'Birthday', width: 150 },
+  {
+    field: 'age',
+    headerName: 'Age',
+    type: 'number',
+    width: 110,
+  },
+  {
+    field: 'marriage',
+    headerName: 'Marriage',
+    description: 'This column has a value getter and is not sortable.',
+    sortable: false,
+    width: 160,
+    valueGetter: (params) =>
+      `${params.getValue(params.id, 'firstName') || ''} ${
+        params.getValue(params.id, 'lastName') || ''
+      }`,
+  },
+];
 export default function ListUser(props) {
 
     const getUserAPI =
@@ -11,48 +34,27 @@ export default function ListUser(props) {
     // var {id, age, birthday,name, marriage, userName} = this.state
 
     const [listUser, setListUser] = useState([]);
-    const getUser = () => {
-    axios
+    let rows = []
+    useEffect(() => {
+      axios
       .get(getUserAPI)
       .then((res) => {
         //Cập nhật giá trị của state listUser
-        setListUser(res.data.data.content);
+        rows = res.data.data.content
+        // setListUser(res.data.data.content);
         console.log("hieu", res.data.data)
       })
       .catch((err) => {
         //Trường hợp xảy ra lỗi
         console.log(err)
       })
-    }
+    });
       
     
         return (
             <div>
                 <h1>List User</h1>
-                <button onClick={getUser}>Get User</button>
-                <table style={{width:"100%"}}>
-                    <tr>
-                        <th>User ID</th>
-                        <th>User Name</th>
-                        <th>Birthday</th>
-                        <th>Age</th>
-                        <th>Marriage</th>
-                        <th>Action</th>
-                    </tr>
-                    {listUser.map((user, index) => {
-                        return (
-                        <React.Fragment key={user.id}>
-                        <tr>
-                        <td>{user.id}</td>
-                        <td>{user.userName}</td>
-                        <td>{user.birthday}</td>
-                        <td>{user.age}</td>
-                        <td>{user.marriage}</td>
-                        </tr>
-                        </React.Fragment>
-                        );
-                    })}
-                </table>
+                <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
                 <Link style={{cursor: "pointer", color: "blue"}} to="/login">Login</Link>
             </div>
             
