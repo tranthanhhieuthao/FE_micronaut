@@ -8,6 +8,7 @@ import TopBar from './Components/TopBar'
 import { makeStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
+import { CookiesProvider } from 'react-cookie';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,7 +32,11 @@ ReactDOM.render(
           <Paper style={{height: "calc(100vh - 200px)", marginTop: "20px"}} className={useStyles.paper}>SideBar</Paper>
         </Grid>
         <Grid item xs={9} >
-          <Paper style={{height: "calc(100vh - 200px)"}} className={useStyles.paper}><App /></Paper>
+          <Paper style={{height: "calc(100vh - 200px)"}} className={useStyles.paper}>
+          <CookiesProvider>
+            <App />
+          </CookiesProvider>
+          </Paper>
         </Grid>
     </Grid>
   </div>

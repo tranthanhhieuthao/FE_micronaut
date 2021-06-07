@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom';
 import axios from "axios"
+import API from './ConfigAxios/AxiosCommon'
+import { useCookies } from 'react-cookie';
 
 export default function ClassWelcome(props) {
+  const [cookies, setCookie] = useCookies(['token']);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -38,7 +41,7 @@ export default function ClassWelcome(props) {
         : "";
       function submitForm(e) {
         //Chặn các event mặc định của form
-        // e.preventDefault();
+        e.preventDefault();
        //Gọi hàm validationForm() dùng để kiểm tra form
         // const validation = this.validationForm()
         //Kiểm tra lỗi của input trong form và hiển thị
@@ -47,15 +50,17 @@ export default function ClassWelcome(props) {
         // }else{
         //   alert('Submit form success')
         // }
-        axios
-      .post("http://localhost:8080/login", {
+        API
+      .post("/login", {
         username: username,
         password: password
       })
       .then((res) => {
 
         // setListUser(res.data.data.content);
-        console.log("hieujwt", res)
+        console.log("hieujwt", res.data.access_token)
+        setCookie('token', res.data.access_token);
+        window.history.pushState(null, "users", "users")
       })
       .catch((err) => {
         //Trường hợp xảy ra lỗi
