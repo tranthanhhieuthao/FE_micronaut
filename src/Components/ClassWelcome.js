@@ -3,12 +3,25 @@ import { Link } from 'react-router-dom';
 import axios from "axios"
 import API from './ConfigAxios/AxiosCommon'
 import { useCookies } from 'react-cookie';
+import { makeStyles } from '@material-ui/core/styles';
+import TextField from '@material-ui/core/TextField';
 
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    '& > *': {
+      margin: theme.spacing(1),
+      width: '30ch',
+    },
+  },
+}));
 export default function ClassWelcome(props) {
-  const [cookies, setCookie] = useCookies(['token']);
+  const [setCookie] = useCookies(['token']);
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const classes = useStyles();
 
     function validationForm() {
         let returnData = {
@@ -33,12 +46,6 @@ export default function ClassWelcome(props) {
         return returnData;
       }
 
-      const handleChange = e =>
-    e.target.name === "username"
-        ? setUsername(e.target.value)
-        : e.target.name === "password"
-        ? setPassword(e.target.value)
-        : "";
       function submitForm(e) {
         //Chặn các event mặc định của form
         e.preventDefault();
@@ -69,40 +76,22 @@ export default function ClassWelcome(props) {
       //  window.history.pushState(null, "users", "users")
       }
         return (
-            <div className="container" style={{ paddingTop: "5%", display: "flex", justifyContent: "center" }}>
-        <form
-          onSubmit={e => {
-            this.submitForm(e);
-          }}
-          className="formWapper"
+        <div className="container" style={{ paddingTop: "5%", display: "flex", justifyContent: "center" }}>
+        <form className={classes.root} noValidate autoComplete="off"
           style={{    border: "1px solid black",
-            height: "200px",
-            width: "300px",
+            height: "300px",
+            width: "350px",
             display: "inline-grid",
             justifyContent: "center",
-            padding: "10px",}}
-        >
-          <div className="form-group">
-            <label htmlFor="text" style={{display: "block"}}>Username</label>
-            <input
-              type="text"
-              className="form-control"
-              name="username"
-              placeholder="Enter User Name"
-              onChange={handleChange}
-              value={username}
-            />
+            padding: "5px",}}>
+          <div><h2>LOGIN</h2></div>
+          <div>
+          <TextField id="standard-basic" label="User Name" type="text" variant="outlined" onChange={e => setUsername(e.target.value)}
+              value={username} />
           </div>
-          <div className="form-group">
-            <label htmlFor="pwd" style={{display: "block"}}>Password</label>
-            <input
-              type="password"
-              className="form-control"
-              name="password"
-              placeholder="Enter password"
-              onChange={handleChange}
-              value={password}
-            />
+          <div>
+          <TextField id="filled-basic" label="Password" type="password" variant="outlined" onChange={e => setPassword(e.target.value)}
+              value={password} />
           </div>
           <div style= {{display: "grid"}}>
           <button type="submit" style={{cursor: "pointer", background: "blue"}} className="btn btn-primary" onClick={submitForm}>

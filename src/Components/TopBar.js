@@ -1,20 +1,44 @@
 import React from 'react'
 import { Link,Route, Switch } from 'react-router-dom';
 import '../CssStyle/TopBar.css'
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import MenuItem from '@material-ui/core/MenuItem';
 
-class TopBar extends React.Component {
+export default function TopBar() {
 
-    render() {
+    const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
         return (
         <div>
             <ul className="horizontal">
-              <li style={{marginRight: "20px"}}><a href="default.asp">Home</a></li>
-              <li><Link to="/login">Logout</Link></li>
+              <li style={{marginRight: "20px"}}>
+              <Button aria-controls="simple-menu" style={{ marginTop: "10px"}} aria-haspopup="true" onClick={handleClick}>
+                Setting
+                </Button>
+                <Menu
+                id="simple-menu"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                >
+                <MenuItem onClick={handleClose}>Profile</MenuItem>
+                <MenuItem onClick={handleClose}><Link to="/login">Logout</Link></MenuItem>
+                </Menu>
+            </li>
            </ul>
+
+           
         </div>
             
         )
-    }
 }
-
-export default TopBar
