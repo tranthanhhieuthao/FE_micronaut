@@ -35,7 +35,7 @@ export default function AdminScreen(props) {
         props.history.push("/home")
       }
     })
-    .catch(error => {
+    .catch(() => {
       setStatus("Bạn không được phép truy cập dữ liệu")
       setState({ open: true, vertical: 'top', horizontal: 'center' })
       props.history.push("/home")

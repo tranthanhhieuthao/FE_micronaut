@@ -9,7 +9,6 @@ import Welcome from './Components/Welcome'
 
 
 ReactDOM.render(
-  <React.StrictMode>
     <BrowserRouter>
             <Switch>
                 <Route path="/login" exact component={ClassWelcome}/>
@@ -17,7 +16,7 @@ ReactDOM.render(
                 <App />
               </Switch>
     </BrowserRouter>
-  </React.StrictMode>,
+,
   document.getElementById('root')
 )
 
