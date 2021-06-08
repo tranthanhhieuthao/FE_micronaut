@@ -4,6 +4,8 @@ import API from './ConfigAxios/AxiosCommon'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert } from '@material-ui/lab';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -17,6 +19,13 @@ export default function ClassWelcome(props) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const classes = useStyles()
+
+  const [state, setState] = useState({
+    open: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, open } = state;
 
   // function validationForm() {
   //   let returnData = {
@@ -66,6 +75,7 @@ export default function ClassWelcome(props) {
       })
       .catch((err) => {
         console.log(err)
+        setState({ open: true, vertical: 'top', horizontal: 'center' })
       })
   }
   return (
@@ -96,6 +106,12 @@ export default function ClassWelcome(props) {
           <Link style={{ cursor: 'pointer', color: 'blue' }} to='/register'>Click here for new user registration</Link>
         </div>
       </form>
+
+      <Snackbar open={open}  autoHideDuration={6000} anchorOrigin={{ vertical, horizontal }}>
+        <Alert  severity="warning" >
+          Wrong password or username!!
+        </Alert>
+      </Snackbar>
 
     </div>
   )

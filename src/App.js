@@ -36,6 +36,14 @@ function App() {
             <Paper style={{ height: 'calc(100vh - 200px)' }} className={useStyles.paper}>
             
           <Switch>
+          <Route
+                exact
+                path="/"
+                render={() => {
+                    return (
+                      <Redirect to="/login" />                    )
+                }}
+              />
             <Route path="/home" component={Home} />
             <Route path="/users" component={ListUser} />
             <Route path="/detail" component={DetailUser} />
