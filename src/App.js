@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import TopBar from './Components/TopBar'
+import SideBar from './Components/SideBar'
 
 
 const useStyles = makeStyles((theme) => ({
@@ -29,7 +30,7 @@ function App() {
             <Paper className={useStyles.paper}><TopBar /></Paper>
           </Grid>
           <Grid item xs={3}>
-            <Paper style={{ height: 'calc(100vh - 200px)', marginTop: '20px' }} className={useStyles.paper}>SideBar</Paper>
+            <Paper style={{ height: 'calc(100vh - 200px)', marginTop: '20px' }} className={useStyles.paper}><SideBar /></Paper>
           </Grid>
           <Grid item xs={9} >
             <Paper style={{ height: 'calc(100vh - 200px)' }} className={useStyles.paper}>

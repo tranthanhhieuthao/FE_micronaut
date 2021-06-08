@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Link } from 'react-router-dom';
 import '../CssStyle/ListUser.css'
-import axios from "axios"
 import { DataGrid } from '@material-ui/data-grid';
 import API from './ConfigAxios/AxiosCommon'
 import Button from "@material-ui/core/Button";
@@ -9,13 +7,18 @@ import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
-import { event } from 'jquery';
 
 
 
-export default function ListUser() {
+export default function ListUser(props) {
+
+  function getCookie(name) {
+    const value = `; ${document.cookie}`
+    const parts = value.split(`; ${name}=`)
+    if (parts.length === 2) return parts.pop().split(';').shift()
+    else return ''
+  }
 
   const [open, setOpen] = useState(false);
   const [rows, setListUser] = useState([]);
@@ -67,6 +70,10 @@ export default function ListUser() {
   }
  
     useEffect( () => {
+      if (getCookie('token') === '') {
+        props.history.push("/login")
+        return
+      }
       fetchData();
     }, []);
 
@@ -83,7 +90,7 @@ export default function ListUser() {
         return (
             <div style={{ height: "660px", width: '100%' }}>
                 <h2>List User</h2>
-                <DataGrid rows={rows} columns={columns} pageSize={10} checkboxSelection paginationMode="server" rowHeight={50} />
+                <DataGrid rows={rows} columns={columns} pageSize={10} paginationMode="server" rowHeight={50} />
                 <Button  
                     variant="contained"
                     color="default"
@@ -94,7 +101,7 @@ export default function ListUser() {
                     <DialogContent>
                       <form noValidate autoComplete='off'>
                         <div>
-                          <TextField required id='standard-required' label='User ID' style={{ width: '400px' }} />
+                          <TextField required id='standard-required' label='Name' style={{ width: '400px' }} />
                         </div>
                         <div>
                           <TextField required id='standard-disabled' label='Password' type='password' style={{ width: '400px' }} />

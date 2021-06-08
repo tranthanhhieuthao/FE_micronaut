@@ -59,9 +59,10 @@ export default function ClassWelcome(props) {
       })
       .then((res) => {
         // setListUser(res.data.data.content);
-        console.log('hieujwt', res.data.access_token)
+        console.log('hieujwt', res.data.roles.toString())
         document.cookie = 'token=' + res.data.access_token
-        props.history.push('/users')
+        document.cookie = 'role=' + res.data.roles.toString()
+        props.history.push('/home')
       })
       .catch((err) => {
         console.log(err)

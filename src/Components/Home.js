@@ -1,14 +1,24 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
-class Home extends React.Component {
+export default function Home(props) {
 
-    render() {
+    function getCookie(name) {
+        const value = `; ${document.cookie}`
+        const parts = value.split(`; ${name}=`)
+        if (parts.length === 2) return parts.pop().split(';').shift()
+        else return ''
+      }
+
+      useEffect( () => {
+        if (getCookie('token') === '') {
+          props.history.push("/login")
+          return
+        }
+      }, []);
+
         return (
             <div>
                 <h1>Home</h1>
             </div>
         )
-    }
 }
-
-export default Home
