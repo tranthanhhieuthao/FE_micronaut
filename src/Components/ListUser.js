@@ -64,7 +64,7 @@ export default function ListUser() {
     const [rows, setListUser] = useState([]);
     useEffect( () => {
       fetchData();
-    });
+    }, []);
 
     const fetchData = async () => {
       var res = await API.get("/api/users?page=1&size=10")
@@ -91,22 +91,47 @@ export default function ListUser() {
                   <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Detail User</DialogTitle>
                     <DialogContent>
-                    <form  noValidate autoComplete="off">
-                      <div>
-                        <TextField required id="standard-required" label="Required" defaultValue="Hello World" />
-                      </div>
-                      <div>
-                        <TextField  id="standard-disabled" label="Disabled" defaultValue="Hello World" />
-                      </div>
-                      <div>
-                        <TextField
-                          id="standard-password-input"
-                          label="Password"
-                          type="password"
-                          autoComplete="current-password"
-                        />
-                      </div>
-                    </form>
+                      <form noValidate autoComplete='off'>
+                        <div>
+                          <TextField required id='standard-required' label='User ID' style={{ width: '400px' }} />
+                        </div>
+                        <div>
+                          <TextField required id='standard-disabled' label='Password' type='password' style={{ width: '400px' }} />
+                        </div>
+                        <div>
+                          <TextField
+                            required
+                            id='standard-password-input'
+                            label='User Name'
+                            style={{ width: '400px' }}
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            required
+                            id='standard-password-input'
+                            label='Birthday'
+                            style={{ width: '400px' }}
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            required
+                            id='standard-password-input'
+                            label='Age'
+                            style={{ width: '400px' }}
+                            type='number'
+                          />
+                        </div>
+                        <div>
+                          <TextField
+                            required
+                            id='standard-password-input'
+                            label='Marriage'
+                            style={{ width: '400px' }}
+                          />
+                        </div>
+                      </form>
                     </DialogContent>
                     <DialogActions>
                   <Button onClick={handleClose} color="primary">
