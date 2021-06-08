@@ -11,10 +11,15 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { event } from 'jquery';
 
 
 
 export default function ListUser() {
+
+  const [open, setOpen] = useState(false);
+  const [rows, setListUser] = useState([]);
+  const [detailValue, setDetailValue] = useState({})
 
   const columns = [
     { field: 'id', headerName: 'User ID', width: 150, align: 'center', headerAlign: 'center' },
@@ -47,9 +52,9 @@ export default function ListUser() {
     }
   ];
 
-  const [open, setOpen] = useState(false);
 
-  const handleClickOpen = () => {
+  const handleClickOpen = (e) => {
+    console.log("lklk", e)
     setOpen(true);
   };
 
@@ -60,34 +65,30 @@ export default function ListUser() {
   function detailUser(params) {
     console.log("detail", params)
   }
-
-    const [rows, setListUser] = useState([]);
+ 
     useEffect( () => {
       fetchData();
     }, []);
 
     const fetchData = async () => {
-      var res = await API.get("/api/users?page=1&size=10")
-      var result = res.data.data.content
+      let res = await API.get("/api/users?page=1&size=10")
+      let result = res.data.data.content
       result.forEach(e => {
         if (e.marriage) e.textMarr = "Married"
         else e.textMarr = "Single"
       })
       setListUser(res.data.data.content)
-      console.log("hieu", rows)
     };
       
         return (
-            <div style={{ height: 400, width: '100%' }}>
-                <h1>List User</h1>
-                <DataGrid rows={rows} columns={columns} pageSize={5} checkboxSelection />
+            <div style={{ height: "660px", width: '100%' }}>
+                <h2>List User</h2>
+                <DataGrid rows={rows} columns={columns} pageSize={10} checkboxSelection paginationMode="server" rowHeight={50} />
                 <Button  
                     variant="contained"
                     color="default"
-                    style={{marginTop: "15px"}}
                     >Export CSV
                 </Button>
-
                   <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Detail User</DialogTitle>
                     <DialogContent>

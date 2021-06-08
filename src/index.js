@@ -24,7 +24,7 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <div className={useStyles.root}>
-        <Grid container spacing={3}>
+        <Grid container spacing={2}>
           <Grid item xs={12}>
             <Paper className={useStyles.paper}><TopBar /></Paper>
           </Grid>
