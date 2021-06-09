@@ -31,9 +31,10 @@ function getCookie(name) {
   else return ''
 }
 
+
 export default function ListUser(props) {
 
-  const columns = [
+  const columns  = [
     { field: 'id', headerName: 'User ID', width: 150, align: 'center', headerAlign: 'center' },
     { field: 'userName', headerName: 'User Name', width: 250 },
     { field: 'dateTime', headerName: 'Birthday', width: 250 },
@@ -63,8 +64,6 @@ export default function ListUser(props) {
       }
     }
   ];
-
- 
   const [open, setOpen] = useState(false);
   const [rows, setListUser] = useState([]);
   const [selectDetail, setSelection] = useState({
@@ -93,7 +92,7 @@ export default function ListUser(props) {
     let pageTemp = params.page
     setPage(pageTemp)
     setSize(10)
-    fetchData()
+    // fetchData()
   }
 
 
@@ -113,7 +112,7 @@ export default function ListUser(props) {
  
 
     const fetchData = async () => {
-      setLoading(true)
+      // setLoading(true)
       try {
         let res = await API.get(`/api/users?page=${page}&size=${size}`)
         let result = res.data.data.content
@@ -122,9 +121,10 @@ export default function ListUser(props) {
           else e.textMarr = "Single"
           e.dateTime = formatDate(e.birthday)
         })
-        setLoading(false)
+                setCountRow(res.data.data.totalSize)
         setListUser(result)
-        setCountRow(res.data.data.totalSize)
+
+        // setLoading(false)
       } catch(error) {
         setLoading(false)
       }
@@ -147,7 +147,7 @@ export default function ListUser(props) {
         return
       }
       fetchData();
-    }, []);
+    },[page]);
 
     function setProperty(property, value) {
       switch(property) {
@@ -193,6 +193,7 @@ export default function ListUser(props) {
                 columns={columns} 
                 rowHeight={50} 
                 rowCount={countRow}
+                paginationMode="server"
                 checkboxSelection
                 onRowSelected={(newSelection) => {
                   setSelection(newSelection.data);

@@ -41,6 +41,7 @@ export default function ClassWelcome(props) {
         document.cookie = 'token=' + res.data.access_token
         document.cookie = 'role=' + res.data.roles.toString()
         props.history.push('/home')
+        window.location.reload()
       })
       .catch((err) => {
         console.log(err)
