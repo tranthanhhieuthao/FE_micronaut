@@ -69,9 +69,10 @@ export default function ListUser(props) {
   const [rows, setListUser] = useState([]);
   const [selectDetail, setSelection] = useState({
     name: "",
-    username: "",
+    userName: "",
     password: "",
     birthday: "",
+    dateTime: "",
     age: "",
     marriage: ""
   });
@@ -79,12 +80,6 @@ export default function ListUser(props) {
   const [size, setSize] = useState(10)
   const [countRow, setCountRow] = useState(1)
   const [loading, setLoading] = useState(false);
-  const [name, setName] = useState("")
-  const [username, setUsername] = useState("")
-  const [password, setPassword] = useState("")
-  const [birthday, setBirthday] = useState("")
-  const [age, setAge] = useState("")
-  const [marriage, setMarriage] = useState(false)
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -96,7 +91,7 @@ export default function ListUser(props) {
 
   const handlePageChange = (params) => { 
     let pageTemp = params.page
-    setPage(pageTemp++)
+    setPage(pageTemp)
     setSize(10)
     fetchData()
   }
@@ -166,7 +161,8 @@ export default function ListUser(props) {
           setSelection({...selectDetail,password: value})
         break;
         case 'birthday':
-          setSelection({...selectDetail,birthday: value})
+          setSelection({...selectDetail,birthday:value})
+          setSelection({...selectDetail,dateTime: value})
         break;
         case 'age':
           setSelection({...selectDetail,age: value})
@@ -176,7 +172,17 @@ export default function ListUser(props) {
         break;
         default:
       }
+    }
 
+    function updateDetailUser() {
+      selectDetail.birthday = selectDetail.dateTime
+      API.post("/api/user/update", selectDetail).then(res =>{
+        console.log("update thanh cong")
+        setOpen(false);
+        fetchData();
+      }).catch(e => {
+        console.log("update that bai")
+      })
     }
       
         return (
@@ -271,7 +277,7 @@ export default function ListUser(props) {
                   <Button onClick={handleClose} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={handleClose} color="primary">
+                  <Button onClick={() => {updateDetailUser()}} color="primary">
                     Confirm
                   </Button>
                   <Button onClick={() => {deleteUser(selectDetail.id)}} color="primary">

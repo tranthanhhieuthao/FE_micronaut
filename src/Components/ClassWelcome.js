@@ -27,47 +27,16 @@ export default function ClassWelcome(props) {
   });
   const { vertical, horizontal, open } = state;
 
-  // function validationForm() {
-  //   let returnData = {
-  //     error: false,
-  //     msg: ''
-  //   }
-  //   // Kiểm tra username
-  //   // const re = /\S+@\S+\.\S+/;
-  //   // if (!re.test(username)) {
-  //   //   returnData = {
-  //   //     error: true,
-  //   //     msg: 'Không đúng định dạng email'
-  //   //   }
-  //   // }
-  //   // Kiểm tra password
-  //   if (password.length < 8) {
-  //     returnData = {
-  //       error: true,
-  //       msg: 'Mật khẩu phải lớn hơn 8 ký tự'
-  //     }
-  //   }
-  //   return returnData
-  // }
 
   function submitForm(e) {
     // Chặn các event mặc định của form
     e.preventDefault()
-    // Gọi hàm validationForm() dùng để kiểm tra form
-    // const validation = this.validationForm()
-    // Kiểm tra lỗi của input trong form và hiển thị
-    // if (validation.error) {
-    //   alert(validation.msg)
-    // }else{
-    //   alert('Submit form success')
-    // }
     API
       .post('/login', {
         username: username,
         password: password
       })
       .then((res) => {
-        // setListUser(res.data.data.content);
         console.log('hieujwt', res.data.roles.toString())
         document.cookie = 'token=' + res.data.access_token
         document.cookie = 'role=' + res.data.roles.toString()
