@@ -23,30 +23,20 @@ function CustomToolbar() {
     </GridToolbarContainer>
   );
 }
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`
+  const parts = value.split(`; ${name}=`)
+  if (parts.length === 2) return parts.pop().split(';').shift()
+  else return ''
+}
+
 export default function ListUser(props) {
-
-  function getCookie(name) {
-    const value = `; ${document.cookie}`
-    const parts = value.split(`; ${name}=`)
-    if (parts.length === 2) return parts.pop().split(';').shift()
-    else return ''
-  }
-
-  const [open, setOpen] = useState(false);
-  const [rows, setListUser] = useState([]);
-  const [detailValue, setDetailValue] = useState({})
-  const [selectDetail, setSelection] = useState({});
-  const [name, setName] = useState("")
-    const [username, setUsername] = useState("")
-    const [password, setPassword] = useState("")
-    const [birthday, setBirthday] = useState("")
-    const [age, setAge] = useState("")
-    const [marriage, setMarriage] = useState(false)
 
   const columns = [
     { field: 'id', headerName: 'User ID', width: 150, align: 'center', headerAlign: 'center' },
-    { field: 'userName', headerName: 'User Name', width: 150 },
-    { field: 'dateTime', headerName: 'Birthday', width: 150 },
+    { field: 'userName', headerName: 'User Name', width: 250 },
+    { field: 'dateTime', headerName: 'Birthday', width: 250 },
     {
       field: 'age',
       headerName: 'Age',
@@ -63,7 +53,7 @@ export default function ListUser(props) {
       headerName: 'Action',
       align: 'center',
       headerAlign: 'center',
-      width: 160,
+      width: 200,
       renderCell: (params) => {
         return <Button  
         variant="contained"
@@ -74,11 +64,29 @@ export default function ListUser(props) {
     }
   ];
 
+ 
+  const [open, setOpen] = useState(false);
+  const [rows, setListUser] = useState([]);
+  const [selectDetail, setSelection] = useState({
+    name: "",
+    username: "",
+    password: "",
+    birthday: "",
+    age: "",
+    marriage: ""
+  });
+  const [page, setPage] = useState(0);
+  const [size, setSize] = useState(10)
+  const [countRow, setCountRow] = useState(1)
+  const [loading, setLoading] = useState(false);
+  const [name, setName] = useState("")
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [birthday, setBirthday] = useState("")
+  const [age, setAge] = useState("")
+  const [marriage, setMarriage] = useState(false)
 
-
-
-  const handleClickOpen = (e) => {
-    console.log("lklk", selectDetail)
+  const handleClickOpen = () => {
     setOpen(true);
   };
 
@@ -86,9 +94,14 @@ export default function ListUser(props) {
     setOpen(false);
   };
 
-  // function setSelection(params) {
-  //   console.log("detail", params)
-  // }
+  const handlePageChange = (params) => { 
+    let pageTemp = params.page
+    setPage(pageTemp++)
+    setSize(10)
+    fetchData()
+  }
+
+
   function formatDate(date) {
     var d = new Date(date),
         month = '' + (d.getMonth() + 1),
@@ -103,6 +116,36 @@ export default function ListUser(props) {
     return [year, month, day].join('-');
 }
  
+
+    const fetchData = async () => {
+      setLoading(true)
+      try {
+        let res = await API.get(`/api/users?page=${page}&size=${size}`)
+        let result = res.data.data.content
+        result.forEach(e => {
+          if (e.marriage) e.textMarr = "Married"
+          else e.textMarr = "Single"
+          e.dateTime = formatDate(e.birthday)
+        })
+        setLoading(false)
+        setListUser(result)
+        setCountRow(res.data.data.totalSize)
+      } catch(error) {
+        setLoading(false)
+      }
+      
+    };
+
+    const deleteUser = (id) => {
+      let listId = []
+      listId.push(id)
+      API.post("/api/users/delete", listId).then(res => {
+        console.log("delete thanh cong")
+        setOpen(false);
+        fetchData();
+      }).catch(er => console.log("loi"))
+    }
+
     useEffect( () => {
       if (getCookie('token') === '') {
         props.history.push("/login")
@@ -111,34 +154,51 @@ export default function ListUser(props) {
       fetchData();
     }, []);
 
-    const fetchData = async () => {
-      let res = await API.get("/api/users?page=1&size=10")
-      let result = res.data.data.content
-      result.forEach(e => {
-        if (e.marriage) e.textMarr = "Married"
-        else e.textMarr = "Single"
-        e.dateTime = formatDate(e.birthday)
-      })
-      setListUser(res.data.data.content)
-    };
+    function setProperty(property, value) {
+      switch(property) {
+      case 'name':
+        setSelection({...selectDetail,name: value})
+        break;
+      case 'username':
+        setSelection({...selectDetail,userName: value})
+        break;
+        case 'password':
+          setSelection({...selectDetail,password: value})
+        break;
+        case 'birthday':
+          setSelection({...selectDetail,birthday: value})
+        break;
+        case 'age':
+          setSelection({...selectDetail,age: value})
+        break;
+        case 'marriage':
+          setSelection({...selectDetail,marriage: value})
+        break;
+        default:
+      }
+
+    }
       
         return (
-            <div style={{ height: "calc(100vh - 290px)", width: '100%' }}>
+            <div style={{ height: "calc(100vh - 280px)", width: '100%' }}>
                 <h2>List User</h2>
                 <DataGrid 
                 rows={rows} 
                 columns={columns} 
-                pageSize={10} 
-                paginationMode="server" 
                 rowHeight={50} 
+                rowCount={countRow}
                 checkboxSelection
-                hideFooterPagination 
                 onRowSelected={(newSelection) => {
                   setSelection(newSelection.data);
-              }}  
-                components={{
+                }}
+                  components={{
                     Toolbar: CustomToolbar,
-                  }}/>
+                  }}
+                  onPageChange={handlePageChange}
+                  pageSize={size}
+                  loading={loading}
+                  pagination
+                  />
                 
                   <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
                     <DialogTitle id="form-dialog-title">Detail User</DialogTitle>
@@ -151,7 +211,7 @@ export default function ListUser(props) {
                           label='Name' 
                           style={{ width: '400px' }}
                           value={selectDetail.name}
-                          onChange={e => { setName(e.target.value)}}
+                          onChange={e => {setProperty('name', e.target.value)}}
                           />
                         </div>
                         <div>
@@ -162,7 +222,7 @@ export default function ListUser(props) {
                           type='password' 
                           style={{ width: '400px' }} 
                           value={selectDetail.password}
-                          onChange={e => { setPassword(e.target.value)}}
+                          onChange={e => {setProperty('password', e.target.value)}}
                           />
                         </div>
                         <div>
@@ -172,7 +232,7 @@ export default function ListUser(props) {
                             label='User Name'
                             style={{ width: '400px' }}
                             value={selectDetail.userName}
-                            onChange={e => { setUsername(e.target.value)}}
+                            onChange={e => {setProperty('username', e.target.value)}}
                           />
                         </div>
                         <div>
@@ -182,7 +242,7 @@ export default function ListUser(props) {
                             style={{ width: '400px' }}
                             type="date"
                             value={selectDetail.dateTime}
-                            onChange={e => { setBirthday(e.target.value)}}
+                            onChange={e => {setProperty('birthday', e.target.value)}}
                           />
                         </div>
                         <div>
@@ -193,13 +253,13 @@ export default function ListUser(props) {
                             style={{ width: '400px' }}
                             type='number'
                             value={selectDetail.age}
-                            onChange={e => { setAge(e.target.value)}}
+                            onChange={e => {setProperty('age', e.target.value)}}
                           />
                         </div>
                         <div>
                         <FormControl component="fieldset">
                         <FormLabel component="legend">Marriage</FormLabel>
-                        <RadioGroup aria-label="gender" name="gender1" value={selectDetail.marriage + ''} onChange={e => setMarriage(e.target.value)}>
+                        <RadioGroup aria-label="gender" name="gender1" value={selectDetail.marriage + ''} onChange={e => {setProperty('marriage', e.target.value)}}>
                             <FormControlLabel value="true" control={<Radio />} label="Married" />
                             <FormControlLabel value="false" control={<Radio />} label="Single" />
                         </RadioGroup>
@@ -214,7 +274,7 @@ export default function ListUser(props) {
                   <Button onClick={handleClose} color="primary">
                     Confirm
                   </Button>
-                  <Button onClick={handleClose} color="primary">
+                  <Button onClick={() => {deleteUser(selectDetail.id)}} color="primary">
                     Delete
                   </Button>
                 </DialogActions>

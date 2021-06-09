@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Route, Switch, Redirect } from 'react-router-dom';
 import Home from './Components/Home'
 import ListUser from './Components/ListUser'
-import DetailUser from './Components/DetailUser'
+// import DetailUser from './Components/DetailUser'
 import AdminScreen from './Components/AdminScreen'
 import Paper from '@material-ui/core/Paper'
 import Grid from '@material-ui/core/Grid'
@@ -46,7 +46,7 @@ function App() {
               />
             <Route path="/home" component={Home} />
             <Route path="/users" component={ListUser} />
-            <Route path="/detail" component={DetailUser} />
+            {/* <Route path="/detail" component={DetailUser} /> */}
             <Route path="/admin" component={AdminScreen} />
             <Redirect to="/" />
           </Switch>
