@@ -92,7 +92,6 @@ export default function ListUser(props) {
     let pageTemp = params.page
     setPage(pageTemp)
     setSize(10)
-    // fetchData()
   }
 
 
@@ -112,7 +111,7 @@ export default function ListUser(props) {
  
 
     const fetchData = async () => {
-      // setLoading(true)
+      setLoading(true)
       try {
         let res = await API.get(`/api/users?page=${page}&size=${size}`)
         let result = res.data.data.content
@@ -124,7 +123,7 @@ export default function ListUser(props) {
                 setCountRow(res.data.data.totalSize)
         setListUser(result)
 
-        // setLoading(false)
+        setLoading(false)
       } catch(error) {
         setLoading(false)
       }
@@ -239,6 +238,7 @@ export default function ListUser(props) {
                             label='User Name'
                             style={{ width: '400px' }}
                             value={selectDetail.userName}
+                            disabled
                             onChange={e => {setProperty('username', e.target.value)}}
                           />
                         </div>
