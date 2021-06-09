@@ -20,6 +20,18 @@ export default function  Welcome() {
     const [age, setAge] = useState("")
     const [marriage, setMarriage] = useState(false)
 
+    const [validname, setValidname] = useState(false)
+    const [validusername, setValidusername] = useState(false)
+    const [validpassword, setValidpassword] = useState(false)
+    const [validbirthday, setValidbirthday] = useState(false)
+    const [validage, setValidage] = useState(false)
+
+    const [validnameText, setValidnameText] = useState("")
+    const [validusernameText, setValidusernameText] = useState("")
+    const [validpasswordText, setValidpasswordText] = useState("")
+    const [validbirthdayText, setValidbirthdayText] = useState("")
+    const [validageText, setValidageText] = useState("")
+
     function registerAction() {
        API.post("/api/user/create", {
            name: name,
@@ -41,11 +53,53 @@ export default function  Welcome() {
        })
     }
 
+    function validateLogin(property, value) {
+      if (value === '') {
+      if (property === 'username') {
+        setValidusername(true)
+        setValidusernameText("Please input username")
+      } else if (property === 'password') {
+        setValidpassword(true)
+        setValidpasswordText("Please input password")
+      } else if (property === 'name') {
+        setValidname(true)
+        setValidnameText("Please input name")
+
+      } else if (property === 'birthday') {
+        setValidbirthday(true)
+        setValidbirthdayText("Please input birthday")
+      } else if (property === 'age') {
+        setValidage(true)
+        setValidageText("Please input age")
+      }
+    } else {
+      if (property === 'username'){
+        setValidusername(false)
+        setValidusernameText("")
+    } else if (property ===  'password' && value.length < 6) {
+      setValidpassword(true)
+      setValidpasswordText("Password should be than 6 character")
+    } else if (property ===  'password' && value.length > 6) {
+      setValidpassword(false)
+      setValidpasswordText("")
+    } else if (property === 'name') {
+      setValidname(false)
+      setValidnameText("")
+    } else if (property === 'birthday') {
+      setValidbirthday(false)
+      setValidbirthdayText("")
+    } else if (property === 'age') {
+      setValidage(false)
+      setValidageText("")
+    }
+    }
+    }
+
     return (
-      <div style={{ paddingTop: '5%', display: 'flex', justifyContent: 'center' }}>
+      <div style={{ paddingTop: '3%', display: 'flex', justifyContent: 'center' }}>
         <form noValidate autoComplete='off'
           style={{ border: '1px solid black',
-            height: '500px',
+            height: '600px',
             width: '450px',
             display: 'inline-grid',
             justifyContent: 'center',
@@ -56,6 +110,8 @@ export default function  Welcome() {
           }}><h2>Register</h2></div>
           <div>
             <TextField 
+                error={validname} helperText={validnameText}
+                onBlur={e => validateLogin('name', e.target.value)}
                 required 
                 id='standard-required' 
                 label='Name' 
@@ -66,6 +122,8 @@ export default function  Welcome() {
           </div>
           <div>
             <TextField 
+            error={validpassword} helperText={validpasswordText}
+            onBlur={e => validateLogin('password', e.target.value)}
                 required 
                 id='standard-disabled' 
                 label='Password' 
@@ -77,6 +135,8 @@ export default function  Welcome() {
           </div>
           <div>
             <TextField
+            error={validusername} helperText={validusernameText}
+            onBlur={e => validateLogin('username', e.target.value)}
               required
               id='standard-password-input'
               label='User Name'
@@ -87,6 +147,8 @@ export default function  Welcome() {
           </div>
           <div>
             <TextField
+            error={validbirthday} helperText={validbirthdayText}
+            onBlur={e => validateLogin('birthday', e.target.value)}
               required
               id='standard-password-input'
               style={{ width: '400px' }}
@@ -97,6 +159,8 @@ export default function  Welcome() {
           </div>
           <div>
             <TextField
+            error={validage} helperText={validageText}
+            onBlur={e => validateLogin('age', e.target.value)}
               required
               id='standard-password-input'
               label='Age'
@@ -107,14 +171,6 @@ export default function  Welcome() {
             />
           </div>
           <div>
-            {/* <TextField
-              required
-              id='standard-password-input'
-              label='Marriage'
-              style={{ width: '400px' }}
-              value={marriage}
-              onChange={e => setMarriage(e.target.value)}
-            /> */}
             <FormControl component="fieldset">
              <FormLabel component="legend">Marriage</FormLabel>
             <RadioGroup aria-label="gender" name="gender1" value={marriage} onChange={e => setMarriage(e.target.value)}>

@@ -18,6 +18,10 @@ const useStyles = makeStyles((theme) => ({
 export default function ClassWelcome(props) {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [errUsername, setErroUsername] = useState(false)
+  const [textValid, setTextValid] = useState("")
+  const [errPassword, setPasswordValid] = useState(false)
+  const [textValidPass, setTextValidPass] = useState("")
   const classes = useStyles()
 
   const [state, setState] = useState({
@@ -48,11 +52,34 @@ export default function ClassWelcome(props) {
         setState({ open: true, vertical: 'top', horizontal: 'center' })
       })
   }
+
+  function validateLogin(property, value) {
+    if (value === '') {
+    if (property === 'username') {
+      setErroUsername(true)
+      setTextValid("Please input username")
+    } else {
+      setPasswordValid(true)
+      setTextValidPass("Please input password")
+    }
+  } else {
+    if (property === 'username'){
+      setErroUsername(false)
+      setTextValid("")
+  } else if (property ===  'password' && value.length < 6) {
+      setPasswordValid(true)
+      setTextValidPass("Password should be than 6 character")
+  } else {
+      setPasswordValid(false)
+      setTextValidPass("")
+  }
+  }
+  }
   return (
     <div className='container' style={{ paddingTop: '5%', display: 'flex', justifyContent: 'center' }}>
       <form className={classes.root} noValidate autoComplete='off'
         style={{ border: '1px solid black',
-          height: '300px',
+          height: '400px',
           width: '350px',
           display: 'inline-grid',
           justifyContent: 'center',
@@ -62,11 +89,25 @@ export default function ClassWelcome(props) {
           justifyContent: 'center'
         }}><h2>LOGIN</h2></div>
         <div>
-          <TextField id='standard-basic' label='User Name' type='text' style={{ width: '250px' }} onChange={e => setUsername(e.target.value)}
+          <TextField 
+          error={errUsername} helperText={textValid} 
+          id='standard-basic' 
+          onBlur={e => validateLogin('username', e.target.value)}
+          label='User Name' 
+          type='text' 
+          style={{ width: '250px' }} 
+          onChange={e => setUsername(e.target.value)}
             value={username} />
         </div>
         <div>
-          <TextField id='filled-basic' label='Password' type='password' style={{ width: '250px' }} onChange={e => setPassword(e.target.value)}
+          <TextField 
+          error={errPassword} helperText={textValidPass} 
+          onBlur={e => validateLogin('password', e.target.value)}
+          id='filled-basic' 
+          label='Password' 
+          type='password' 
+          style={{ width: '250px' }} 
+          onChange={e => setPassword(e.target.value)}
             value={password} />
         </div>
         <div style= {{ display: 'grid' }}>
