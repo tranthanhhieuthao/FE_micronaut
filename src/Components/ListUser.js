@@ -75,7 +75,7 @@ export default function ListUser(props) {
     age: "",
     marriage: ""
   });
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [size, setSize] = useState(10)
   const [countRow, setCountRow] = useState(1)
   const [loading, setLoading] = useState(false);
@@ -206,7 +206,7 @@ export default function ListUser(props) {
                   pagination
                   />
                 
-                  <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
+                  <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title" >
                     <DialogTitle id="form-dialog-title">Detail User</DialogTitle>
                     <DialogContent>
                       <form noValidate autoComplete='off'>
@@ -215,7 +215,7 @@ export default function ListUser(props) {
                           required 
                           id='standard-required' 
                           label='Name' 
-                          style={{ width: '400px' }}
+                          style={{ width: '400px', marginBottom: "20px" }}
                           value={selectDetail.name}
                           onChange={e => {setProperty('name', e.target.value)}}
                           />
@@ -226,7 +226,7 @@ export default function ListUser(props) {
                           id='standard-disabled' 
                           label='Password' 
                           type='password' 
-                          style={{ width: '400px' }} 
+                          style={{ width: '400px' , marginBottom: "20px" }} 
                           value={selectDetail.password}
                           onChange={e => {setProperty('password', e.target.value)}}
                           />
@@ -236,7 +236,7 @@ export default function ListUser(props) {
                             required
                             id='standard-password-input'
                             label='User Name'
-                            style={{ width: '400px' }}
+                            style={{ width: '400px' , marginBottom: "20px" }}
                             value={selectDetail.userName}
                             disabled
                             onChange={e => {setProperty('username', e.target.value)}}
@@ -246,7 +246,7 @@ export default function ListUser(props) {
                           <TextField
                             required
                             id='standard-password-input'
-                            style={{ width: '400px' }}
+                            style={{ width: '400px', marginBottom: "20px" }}
                             type="date"
                             value={selectDetail.dateTime}
                             onChange={e => {setProperty('birthday', e.target.value)}}
@@ -257,14 +257,14 @@ export default function ListUser(props) {
                             required
                             id='standard-password-input'
                             label='Age'
-                            style={{ width: '400px' }}
+                            style={{ width: '400px', marginBottom: "20px" }}
                             type='number'
                             value={selectDetail.age}
                             onChange={e => {setProperty('age', e.target.value)}}
                           />
                         </div>
                         <div>
-                        <FormControl component="fieldset">
+                        <FormControl component="fieldset" >
                         <FormLabel component="legend">Marriage</FormLabel>
                         <RadioGroup aria-label="gender" name="gender1" value={selectDetail.marriage + ''} onChange={e => {setProperty('marriage', e.target.value)}}>
                             <FormControlLabel value="true" control={<Radio />} label="Married" />
@@ -275,13 +275,13 @@ export default function ListUser(props) {
                       </form>
                     </DialogContent>
                     <DialogActions>
-                  <Button onClick={handleClose} color="primary">
+                  <Button onClick={handleClose} color="inherit">
                     Cancel
                   </Button>
                   <Button onClick={() => {updateDetailUser()}} color="primary">
-                    Confirm
+                    Update
                   </Button>
-                  <Button onClick={() => {deleteUser(selectDetail.id)}} color="primary">
+                  <Button onClick={() => {deleteUser(selectDetail.id)}} color="secondary">
                     Delete
                   </Button>
                 </DialogActions>
