@@ -47,14 +47,12 @@ export default function ClassWelcome(props) {
         password: password
       })
       .then((res) => {
-        console.log('hieujwt', res.data.roles.toString())
         document.cookie = 'token=' + res.data.access_token
         document.cookie = 'role=' + res.data.roles.toString()
         props.history.push('/home')
         window.location.reload()
       })
       .catch((err) => {
-        console.log(err)
         setNotifyText("Wrong password or usename , please check again")
         setState({ open: true, vertical: 'top', horizontal: 'center' })
       })

@@ -61,7 +61,6 @@ export default function  Welcome() {
            age: age,
            marriage: marriage
        }).then(res => {
-           console.log('dang ki thanh cong')
            setName("")
            setUsername("")
            setPassword("")
@@ -71,7 +70,6 @@ export default function  Welcome() {
            setNotifyText("Create Success ")
            setTypeNotify("success")
        }).catch(error => {
-           console.log(error)
            setNotifyText("Create failed ")
            setTypeNotify("error")
        })

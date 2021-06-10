@@ -132,7 +132,7 @@ export default function ListUser(props) {
           else e.textMarr = "Single"
           e.dateTime = formatDate(e.birthday)
         })
-                setCountRow(res.data.data.totalSize)
+        setCountRow(res.data.data.totalSize)
         setListUser(result)
 
         setLoading(false)
@@ -146,14 +146,12 @@ export default function ListUser(props) {
       let listId = []
       listId.push(id)
       API.post("/api/users/delete", listId).then(res => {
-        console.log("delete thanh cong")
         setOpen(false);
         setNotifyText("Delete success")
         setTypeNotify("success")
         setState({ openMs: true, vertical: 'top', horizontal: 'center' })
         fetchData();
       }).catch(er => {
-        console.log("loi")
         setNotifyText("Delete failed")
         setTypeNotify("error")
         setState({ openMs: true, vertical: 'top', horizontal: 'center' })
@@ -196,14 +194,12 @@ export default function ListUser(props) {
     function updateDetailUser() {
       selectDetail.birthday = selectDetail.dateTime
       API.post("/api/user/update", selectDetail).then(res =>{
-        console.log("update thanh cong")
         setOpen(false);
         setNotifyText("Update success")
         setTypeNotify("success")
         setState({ openMs: true, vertical: 'top', horizontal: 'center' })
         fetchData();
       }).catch(e => {
-        console.log("update that bai")
         setNotifyText("Update failed")
         setTypeNotify("error")
         setState({ openMs: true, vertical: 'top', horizontal: 'center' })
