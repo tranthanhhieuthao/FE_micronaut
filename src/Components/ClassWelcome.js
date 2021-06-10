@@ -36,7 +36,7 @@ export default function ClassWelcome(props) {
   function submitForm(e) {
     // Chặn các event mặc định của form
     e.preventDefault()
-    if (errUsername || errPassword) {
+    if (errUsername || errPassword || username === '' || password === '') {
       setNotifyText("Please check input password or username")
       setState({ open: true, vertical: 'top', horizontal: 'center' })
       return

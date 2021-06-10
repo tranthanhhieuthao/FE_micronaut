@@ -45,6 +45,14 @@ export default function  Welcome() {
     const { vertical, horizontal, openMs } = state;
 
     function registerAction() {
+
+      if (validname || validusername || validpassword || validbirthday || validage 
+        || validnameText === '' || validusernameText === ''  || validpasswordText === ''  || validbirthdayText === '' || validageText === '') {
+        setNotifyText("Please check input data again")
+        setState({ openMs: true, vertical: 'top', horizontal: 'center' })
+        setTypeNotify("warning")
+        return
+      }
        API.post("/api/user/create", {
            name: name,
            userName: username,
