@@ -9,6 +9,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert } from '@material-ui/lab';
 
 
 export default function  Welcome() {
@@ -32,6 +34,16 @@ export default function  Welcome() {
     const [validbirthdayText, setValidbirthdayText] = useState("")
     const [validageText, setValidageText] = useState("")
 
+    const [notifyText, setNotifyText] = useState("")
+    const [typeNotify, setTypeNotify] = useState("")
+
+    const [state, setState] = useState({
+      openMs: false,
+      vertical: 'top',
+      horizontal: 'center',
+    });
+    const { vertical, horizontal, openMs } = state;
+
     function registerAction() {
        API.post("/api/user/create", {
            name: name,
@@ -48,8 +60,12 @@ export default function  Welcome() {
            setBirthday("")
            setAge("")
            setMarriage(false)
+           setNotifyText("Create Success ")
+           setTypeNotify("success")
        }).catch(error => {
            console.log(error)
+           setNotifyText("Create failed ")
+           setTypeNotify("error")
        })
     }
 
@@ -188,6 +204,12 @@ export default function  Welcome() {
             </Link>
           </Button>
         </form>
+
+        <Snackbar open={openMs}  autoHideDuration={3000} anchorOrigin={{ vertical, horizontal }} onClose={() => setState({openMs: false, vertical: 'top', horizontal: 'center'})}>
+              <Alert  severity={typeNotify} >
+                {notifyText}
+              </Alert>
+            </Snackbar>
       </div>
     )
 }

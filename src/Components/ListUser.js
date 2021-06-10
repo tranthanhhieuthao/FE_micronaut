@@ -13,6 +13,8 @@ import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormControl from '@material-ui/core/FormControl';
 import FormLabel from '@material-ui/core/FormLabel';
+import Snackbar from '@material-ui/core/Snackbar';
+import { Alert } from '@material-ui/lab';
 
 
 
@@ -79,6 +81,16 @@ export default function ListUser(props) {
   const [size, setSize] = useState(10)
   const [countRow, setCountRow] = useState(1)
   const [loading, setLoading] = useState(false);
+  const [notifyText, setNotifyText] = useState("")
+  const [typeNotify, setTypeNotify] = useState("")
+
+
+  const [state, setState] = useState({
+    openMs: false,
+    vertical: 'top',
+    horizontal: 'center',
+  });
+  const { vertical, horizontal, openMs } = state;
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -136,8 +148,16 @@ export default function ListUser(props) {
       API.post("/api/users/delete", listId).then(res => {
         console.log("delete thanh cong")
         setOpen(false);
+        setNotifyText("Delete success")
+        setTypeNotify("success")
+        setState({ openMs: true, vertical: 'top', horizontal: 'center' })
         fetchData();
-      }).catch(er => console.log("loi"))
+      }).catch(er => {
+        console.log("loi")
+        setNotifyText("Delete failed")
+        setTypeNotify("error")
+        setState({ openMs: true, vertical: 'top', horizontal: 'center' })
+      })
     }
 
     useEffect( () => {
@@ -178,9 +198,15 @@ export default function ListUser(props) {
       API.post("/api/user/update", selectDetail).then(res =>{
         console.log("update thanh cong")
         setOpen(false);
+        setNotifyText("Update success")
+        setTypeNotify("success")
+        setState({ openMs: true, vertical: 'top', horizontal: 'center' })
         fetchData();
       }).catch(e => {
         console.log("update that bai")
+        setNotifyText("Update failed")
+        setTypeNotify("error")
+        setState({ openMs: true, vertical: 'top', horizontal: 'center' })
       })
     }
       
@@ -286,6 +312,13 @@ export default function ListUser(props) {
                   </Button>
                 </DialogActions>
               </Dialog>
+
+            {/* message notify */}
+            <Snackbar open={openMs}  autoHideDuration={3000} anchorOrigin={{ vertical, horizontal }} onClose={() => setState({openMs: false, vertical: 'top', horizontal: 'center'})}>
+              <Alert  severity={typeNotify} >
+                {notifyText}
+              </Alert>
+            </Snackbar>
             </div>
             
         )

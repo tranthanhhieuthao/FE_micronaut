@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     overflow: hidden;
-    background-color: wheat;
+    background-color: rgb(128, 133, 130);
     display: flex;
     justify-content: flex-end;
     height: 70px;

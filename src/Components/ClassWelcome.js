@@ -23,6 +23,7 @@ export default function ClassWelcome(props) {
   const [errPassword, setPasswordValid] = useState(false)
   const [textValidPass, setTextValidPass] = useState("")
   const classes = useStyles()
+  const [notifyText, setNotifyText] = useState("")
 
   const [state, setState] = useState({
     open: false,
@@ -35,6 +36,11 @@ export default function ClassWelcome(props) {
   function submitForm(e) {
     // Chặn các event mặc định của form
     e.preventDefault()
+    if (errUsername || errPassword) {
+      setNotifyText("Please check input password or username")
+      setState({ open: true, vertical: 'top', horizontal: 'center' })
+      return
+    }
     API
       .post('/login', {
         username: username,
@@ -49,6 +55,7 @@ export default function ClassWelcome(props) {
       })
       .catch((err) => {
         console.log(err)
+        setNotifyText("Wrong password or usename , please check again")
         setState({ open: true, vertical: 'top', horizontal: 'center' })
       })
   }
@@ -71,9 +78,9 @@ export default function ClassWelcome(props) {
       setTextValidPass("Password should be than 6 character")
   } else {
       setPasswordValid(false)
-      setTextValidPass("")
-  }
-  }
+      setTextValidPass("Please input password")
+    }
+   }
   }
   return (
     <div className='container' style={{ paddingTop: '5%', display: 'flex', justifyContent: 'center' }}>
@@ -118,9 +125,9 @@ export default function ClassWelcome(props) {
         </div>
       </form>
 
-      <Snackbar open={open}  autoHideDuration={6000} anchorOrigin={{ vertical, horizontal }}>
+      <Snackbar open={open}  autoHideDuration={3000} anchorOrigin={{ vertical, horizontal }} onClose={() => setState({open: false, vertical: 'top', horizontal: 'center'})}>
         <Alert  severity="warning" >
-          Wrong password or username!!
+          {notifyText}
         </Alert>
       </Snackbar>
 
