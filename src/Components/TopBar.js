@@ -34,7 +34,7 @@ export default function TopBar(props) {
           >
             <MenuItem onClick={handleClose}>Profile</MenuItem>
             <MenuItem onClick={logoutUser}>
-              <Link to='/login'>Login</Link>
+              <Link to='/login'>Logout</Link>
             </MenuItem>
           </Menu>
         </li>
