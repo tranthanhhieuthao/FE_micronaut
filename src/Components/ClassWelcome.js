@@ -35,7 +35,7 @@ export default function ClassWelcome(props) {
 
   function submitForm(e) {
     // Chặn các event mặc định của form
-    e.preventDefault()
+    // e.preventDefault()
     if (errUsername || errPassword || username === '' || password === '') {
       setNotifyText("Please check input password or username")
       setState({ open: true, vertical: 'top', horizontal: 'center' })
@@ -80,8 +80,14 @@ export default function ClassWelcome(props) {
     }
    }
   }
+
+  const handleKeyPress = (event) => {
+    if(event.key === 'Enter'){
+      submitForm(event)
+    }
+  }
   return (
-    <div className='container' style={{ paddingTop: '5%', display: 'flex', justifyContent: 'center' }}>
+    <div className='container' style={{ paddingTop: '5%', display: 'flex', justifyContent: 'center' }} onKeyPress={handleKeyPress}>
       <form className={classes.root} noValidate autoComplete='off'
         style={{ border: '1px solid black',
           height: '400px',
@@ -95,6 +101,7 @@ export default function ClassWelcome(props) {
         }}><h2>LOGIN</h2></div>
         <div>
           <TextField 
+          onKeyPress={handleKeyPress}
           error={errUsername} helperText={textValid} 
           id='standard-basic' 
           onBlur={e => validateLogin('username', e.target.value)}
@@ -106,6 +113,7 @@ export default function ClassWelcome(props) {
         </div>
         <div>
           <TextField 
+          onKeyPress={handleKeyPress}
           error={errPassword} helperText={textValidPass} 
           onBlur={e => validateLogin('password', e.target.value)}
           id='filled-basic' 
@@ -116,7 +124,7 @@ export default function ClassWelcome(props) {
             value={password} />
         </div>
         <div style= {{ display: 'grid' }}>
-          <Button color='primary' onClick={submitForm} >
+          <Button color='primary' onClick={submitForm}>
             Login
           </Button>
           <Link style={{ cursor: 'pointer', color: 'blue' }} to='/register'>Click here for new user registration</Link>
