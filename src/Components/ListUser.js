@@ -77,7 +77,7 @@ export default function ListUser(props) {
     age: "",
     marriage: ""
   });
-  const [page, setPage] = useState(0);
+  const [page, setPage] = useState(1);
   const [size, setSize] = useState(10)
   const [countRow, setCountRow] = useState(1)
   const [loading, setLoading] = useState(false);
@@ -157,6 +157,7 @@ export default function ListUser(props) {
         setState({ openMs: true, vertical: 'top', horizontal: 'center' })
       })
     }
+
 
     useEffect( () => {
       if (getCookie('token') === '') {
